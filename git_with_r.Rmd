@@ -1,0 +1,128 @@
+---
+title: "Usando o Git no RStudio"
+author: "Beatriz Pinna"
+date: "`r format(Sys.time(), '%d/%m/%y')`"
+output: 
+  html_document:
+    theme: united
+    highlight: tango
+    toc: true
+    toc_float: 
+      collapsed: false
+      smooth_scroll: false
+    number_sections: false 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Etapas
+
+Este documento apresenta uma breve descrição para você que quer ou precisa controlar a versão dos seus projetos no R através do Github. Para isto, apresentamos essas 3 estapas a seguir para iniciar:
+
+1. Instalação do Git
+
+2. Criar uma conta no Github
+
+3. Controle de Versão no RStudio
+
+
+## Instalação do Git
+
+O Git é um software gratuito e com código fonte aberto para controle de versão.
+Faça o download do Git por esse [link](https://git-scm.com/downloads).
+
+trabalho > mudanças >  salvar uma versão > mandar as versões para o remoto
+
+
++ working directory: arquivo adicionado para ser monitorado -> avisa quando for modificado
+
+
++ staging area: `add` arquivos/mudanças adicionadas
+
+
++ `commit`: cria uma versão com os arquivos adicionados
+
+
++ `push`: manda para o remoto os commits que ainda não tiverem sido enviados
+
+Veja se o Git aparece no RStudio em Tools > Global Optios > Git/SVN.
+ 
+```{r, echo=FALSE, out.width = '50%', fig.align="center"}
+knitr::include_graphics("./Images/git_rstudio.png")
+```
+
+
+
+## Conta no Github
+
+Para que você possa controlar o histórico do seu projeto você precisa criar uma conta gratuita no Github através desse [link](https://github.com/).
+
+
+
+## Controlde de versão no RStudio
+
+Para configurar o Rstudio com o Git direto pelo RStudio é necessário instalar o pacote `usethis()`. 
+
+```{r, eval=FALSE}
+install.packages("usethis")
+library(usethis)
+```
+
+
+Após a instalação do pacote, vamos configurar seu e-mail associado ao Github.
+
+```{r, eval=FALSE}
+use_git_config(user.name = "Beatriz Pinna", 
+               user.email = "beatrizrpinna@gmail.com") 
+```
+
+
+Agora vamos configurar o Github com o Rstudio. Para isso, vamos criar um token no Github utilizando a função a seguir. 
+
+```{r, eval=FALSE}
+browse_github_token()
+```
+
+Esta função irá abrir uma página do Github para criar o token. Em **Note** você poderá atribuir um novo nome e depois clicar em **Generate Token**. Copie o token gerado e abra o arquivo .Renviron com o comando abaixo.
+
+```{r, eval=FALSE}
+edit_r_environ()
+```
+
+No arquivo .Renviron adicione **GITHUB_PAT=SEU_TOKEN**, salve o arquivo e reinicie o RStudio com o comando CTRL + SHIFT + F10.
+
+Agora já podemos trabalhar com projetos no Github clonando um repositório. Para isso, faça as seguintes etapas:
+
+### Crie um repositório pelo Github
+
+No Github vá em Repositories > New para criar um novo repositório. Em **Repository name** coloque o nome que deseja e adicione uma descrição em **Description**, se quiser. Além disso, é possível escolher a permissão do seu repositório: público ou privado. Para finalizar, marque a opção para adicionar o arquivo README, que é uma introdução do seu projeto e será clonado no seu computador, e clique em **Create repository**.
+
+```{r, echo=FALSE, out.width = '70%', fig.align="center"}
+knitr::include_graphics("./Images/new_repository.png")
+```
+
+
+### Crie um projeto de controle de versão pelo RStudio
+
+
+No Github abra o repositório que você criou e em **Clone or download** copie a URL, como aparece na imagem abaixo.
+
+```{r, echo=FALSE, out.width = '70%', fig.align="center"}
+knitr::include_graphics("./Images/clone_repository.png")
+```
+
+No Rstudio vá em File > New Project > Version Control > Git e crie um novo projeto de controle de versão. Em **Repository URL** cole o link do repositório do Github que você copiou antes. Após inserir o link o campo **Project directory name** será prennchido automaticamente, e selecione o diretório em **Create project as subdirectory of** para salvar a cópia local do repositório 
+
+```{r, echo=FALSE, out.width = '50%', fig.align="center"}
+knitr::include_graphics("./Images/new_project.png")
+```
+
+
+O Git através do RStudio fornece uma interface gráfica simples. Ao abrir o seu projeto versionados com Git no RStudio você verá o Painel do Git como na imagem abaixo.
+
+
+
+
+[RStudio Cheatsheet](https://rstudio.com/wp-content/uploads/2016/03/rstudio-IDE-cheatsheet-portuguese.pdf)
