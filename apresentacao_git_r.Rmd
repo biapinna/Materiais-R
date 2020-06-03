@@ -1,5 +1,5 @@
 ---
-title: "Usando o Git no RStudio"
+title: "Usando o Git/Github no RStudio"
 author: "Beatriz Pinna"
 date: "`r format(Sys.time(), '%d/%m/%y')`"
 output: 
@@ -19,9 +19,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Etapas
 
-Este documento apresenta uma breve descrição para você que quer ou precisa controlar a versão dos seus projetos no R através do Github. Para isto, apresentamos essas 3 estapas a seguir para iniciar:
+Este documento apresenta uma breve descrição para você que quer ou precisa controlar a versão dos seus projetos no R através do Github. Para isto, vamos seguir estas 3 etapas:
 
-1. Instalação do Git
+1. Instalar o Git
 
 2. Criar uma conta no Github
 
@@ -30,22 +30,7 @@ Este documento apresenta uma breve descrição para você que quer ou precisa co
 
 ## Instalação do Git
 
-O Git é um software gratuito e com código fonte aberto para controle de versão.
-Faça o download do Git por esse [link](https://git-scm.com/downloads).
-
-trabalho > mudanças >  salvar uma versão > mandar as versões para o remoto
-
-
-+ working directory: arquivo adicionado para ser monitorado -> avisa quando for modificado
-
-
-+ staging area: `add` arquivos/mudanças adicionadas
-
-
-+ `commit`: cria uma versão com os arquivos adicionados
-
-
-+ `push`: manda para o remoto os commits que ainda não tiverem sido enviados
+Git é um sistema de controle de versões distribuído, usado principalmente no desenvolvimento de software, mas pode ser usado para registrar o histórico de edições de qualquer tipo de arquivo. Faça o download do Git por esse [link](https://git-scm.com/downloads).
 
 Veja se o Git aparece no RStudio em Tools > Global Optios > Git/SVN.
  
@@ -59,7 +44,7 @@ knitr::include_graphics("./Images/git_rstudio.png")
 
 Para que você possa controlar o histórico do seu projeto você precisa criar uma conta gratuita no Github através desse [link](https://github.com/).
 
-
+GitHub é uma plataforma de hospedagem de código-fonte com controle de versão usando o Git. Ele permite que programadores, utilitários ou qualquer usuário cadastrado na plataforma contribuam em projetos privados e/ou Open Source de qualquer lugar do mundo.
 
 ## Controlde de versão no RStudio
 
@@ -91,11 +76,9 @@ Esta função irá abrir uma página do Github para criar o token. Em **Note** v
 edit_r_environ()
 ```
 
-No arquivo .Renviron adicione **GITHUB_PAT=SEU_TOKEN**, salve o arquivo e reinicie o RStudio com o comando CTRL + SHIFT + F10.
+No arquivo .Renviron adicione **GITHUB_PAT=SEU_TOKEN**, salve o arquivo e reinicie o RStudio com o comando CTRL + SHIFT + F10. Agora já podemos trabalhar com projetos no Github clonando um repositório. Para isso, faça as seguintes etapas:
 
-Agora já podemos trabalhar com projetos no Github clonando um repositório. Para isso, faça as seguintes etapas:
-
-### Crie um repositório pelo Github
+> Crie um repositório pelo Github
 
 No Github vá em Repositories > New para criar um novo repositório. Em **Repository name** coloque o nome que deseja e adicione uma descrição em **Description**, se quiser. Além disso, é possível escolher a permissão do seu repositório: público ou privado. Para finalizar, marque a opção para adicionar o arquivo README, que é uma introdução do seu projeto e será clonado no seu computador, e clique em **Create repository**.
 
@@ -104,7 +87,7 @@ knitr::include_graphics("./Images/new_repository.png")
 ```
 
 
-### Crie um projeto de controle de versão pelo RStudio
+> Crie um projeto de controle de versão pelo RStudio
 
 
 No Github abra o repositório que você criou e em **Clone or download** copie a URL, como aparece na imagem abaixo.
@@ -113,7 +96,7 @@ No Github abra o repositório que você criou e em **Clone or download** copie a
 knitr::include_graphics("./Images/clone_repository.png")
 ```
 
-No Rstudio vá em File > New Project > Version Control > Git e crie um novo projeto de controle de versão. Em **Repository URL** cole o link do repositório do Github que você copiou antes. Após inserir o link o campo **Project directory name** será prennchido automaticamente, e selecione o diretório em **Create project as subdirectory of** para salvar a cópia local do repositório 
+No Rstudio vá em File > New Project > Version Control > Git e crie um novo projeto de controle de versão. Em **Repository URL** cole o link do repositório do Github que você copiou. Após inserir o link, o campo **Project directory name** será prennchido automaticamente, e selecione o diretório em **Create project as subdirectory of** para salvar a cópia local do repositório. 
 
 ```{r, echo=FALSE, out.width = '50%', fig.align="center"}
 knitr::include_graphics("./Images/new_project.png")
@@ -122,7 +105,34 @@ knitr::include_graphics("./Images/new_project.png")
 
 O Git através do RStudio fornece uma interface gráfica simples. Ao abrir o seu projeto versionados com Git no RStudio você verá o Painel do Git como na imagem abaixo.
 
+```{r, echo=FALSE, out.width = '50%', fig.align="center"}
+knitr::include_graphics("./Images/painel_git.png")
+```
 
 
+É necessário selecionar os arquivos na coluna **Staged** para prosseguir com o **Commit**. De acordo com a imagem abaixo, primeiro escreva uma mensagem para identificar o **Commit**, clique no botão commit e aparecerá uma mensagem dos arquivos modificados, feche a mensagem e clique em **Push** para subir os arquivos no Github. O comando **Pull** baixa os códigos no Github para a sua máquina.
 
-[RStudio Cheatsheet](https://rstudio.com/wp-content/uploads/2016/03/rstudio-IDE-cheatsheet-portuguese.pdf)
+```{r, echo=FALSE, out.width = '90%', fig.align="center"}
+knitr::include_graphics("./Images/commit.png")
+```
+
+
+Interface gráfica do Rstudio com o Git:
+
+```{r, echo=FALSE, out.width = '65%', fig.align="center"}
+knitr::include_graphics("./Images/git_cheatsheet.png")
+```
+Fonte: [RStudio Cheatsheet](https://rstudio.com/wp-content/uploads/2016/03/rstudio-IDE-cheatsheet-portuguese.pdf)
+
+
+## Referências
+
+https://pt.wikipedia.org/wiki/Git
+
+https://pt.wikipedia.org/wiki/GitHub
+
+https://beatrizmilz.github.io/RLadies-Git-RStudio-2019/#1
+
+https://github.com/saramortara/R-git-apresentacao/blob/master/trabalhos_reprodutiveis.pdf
+
+https://www.curso-r.com/blog/2017-07-17-rstudio-e-github/
