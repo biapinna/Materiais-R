@@ -3,10 +3,11 @@ title: "Usando o Git/Github no RStudio"
 author: "Beatriz Pinna"
 date: "`r format(Sys.time(), '%d/%m/%y')`"
 output: github_document
+
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, cache = FALSE)
+```{r setup, include = FALSE, cache = FALSE}
+knitr::opts_chunk$set(error = TRUE)
 ```
 
 ## Etapas
