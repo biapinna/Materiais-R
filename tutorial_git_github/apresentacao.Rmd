@@ -2,16 +2,7 @@
 title: "Usando o Git/Github no RStudio"
 author: "Beatriz Pinna"
 date: "`r format(Sys.time(), '%d/%m/%y')`"
-output: 
-  html_document:
-    keep_md: true
-    theme: united
-    highlight: tango
-    toc: true
-    toc_float: 
-      collapsed: false
-      smooth_scroll: false
-    number_sections: false 
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
