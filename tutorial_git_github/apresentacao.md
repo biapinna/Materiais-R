@@ -1,7 +1,7 @@
 ---
 title: "Usando o Git/Github no RStudio"
 author: "Beatriz Pinna"
-date: "`r format(Sys.time(), '%d/%m/%y')`"
+date: "10/06/20"
 output: 
   html_document:
     keep_md: true
@@ -14,9 +14,7 @@ output:
     number_sections: false 
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+
 
 ## Etapas
 
@@ -35,9 +33,7 @@ Git é um sistema de controle de versões distribuído, usado principalmente no 
 
 Veja se o Git aparece no RStudio em Tools > Global Optios > Git/SVN.
  
-```{r, echo=FALSE, out.width = '50%', fig.align="center"}
-knitr::include_graphics("./Images/git_rstudio.png")
-```
+<img src="./Images/git_rstudio.png" width="50%" style="display: block; margin: auto;" />
 
 
 
@@ -51,7 +47,8 @@ GitHub é uma plataforma de hospedagem de código-fonte com controle de versão 
 
 Para configurar o Rstudio com o Git direto pelo RStudio é necessário instalar o pacote `usethis()`. 
 
-```{r, eval=FALSE}
+
+```r
 install.packages("usethis")
 library(usethis)
 ```
@@ -59,7 +56,8 @@ library(usethis)
 
 Após a instalação do pacote, vamos configurar seu e-mail associado ao Github.
 
-```{r, eval=FALSE}
+
+```r
 use_git_config(user.name = "Beatriz Pinna", 
                user.email = "beatrizrpinna@gmail.com") 
 ```
@@ -67,13 +65,15 @@ use_git_config(user.name = "Beatriz Pinna",
 
 Agora vamos configurar o Github com o Rstudio. Para isso, vamos criar um token no Github utilizando a função a seguir. 
 
-```{r, eval=FALSE}
+
+```r
 browse_github_token()
 ```
 
 Esta função irá abrir uma página do Github para criar o token. Em **Note** você poderá atribuir um novo nome e depois clicar em **Generate Token**. Copie o token gerado e abra o arquivo .Renviron com o comando abaixo.
 
-```{r, eval=FALSE}
+
+```r
 edit_r_environ()
 ```
 
@@ -83,9 +83,7 @@ No arquivo .Renviron adicione **GITHUB_PAT=SEU_TOKEN**, salve o arquivo e reinic
 
 No Github vá em Repositories > New para criar um novo repositório. Em **Repository name** coloque o nome que deseja e adicione uma descrição em **Description**, se quiser. Além disso, é possível escolher a permissão do seu repositório: público ou privado. Para finalizar, marque a opção para adicionar o arquivo README, que é uma introdução do seu projeto e será clonado no seu computador, e clique em **Create repository**.
 
-```{r, echo=FALSE, out.width = '70%', fig.align="center"}
-knitr::include_graphics("./Images/new_repository.png")
-```
+<img src="./Images/new_repository.png" width="70%" style="display: block; margin: auto;" />
 
 
 > Crie um projeto de controle de versão pelo RStudio
@@ -93,36 +91,26 @@ knitr::include_graphics("./Images/new_repository.png")
 
 No Github abra o repositório que você criou e em **Clone or download** copie a URL, como aparece na imagem abaixo.
 
-```{r, echo=FALSE, out.width = '70%', fig.align="center"}
-knitr::include_graphics("./Images/clone_repository.png")
-```
+<img src="./Images/clone_repository.png" width="70%" style="display: block; margin: auto;" />
 
 No Rstudio vá em File > New Project > Version Control > Git e crie um novo projeto de controle de versão. Em **Repository URL** cole o link do repositório do Github que você copiou. Após inserir o link, o campo **Project directory name** será prennchido automaticamente, e selecione o diretório em **Create project as subdirectory of** para salvar a cópia local do repositório. 
 
-```{r, echo=FALSE, out.width = '50%', fig.align="center"}
-knitr::include_graphics("./Images/new_project.png")
-```
+<img src="./Images/new_project.png" width="50%" style="display: block; margin: auto;" />
 
 
 O Git através do RStudio fornece uma interface gráfica simples. Ao abrir o seu projeto versionados com Git no RStudio você verá o Painel do Git como na imagem abaixo.
 
-```{r, echo=FALSE, out.width = '50%', fig.align="center"}
-knitr::include_graphics("./Images/painel_git.png")
-```
+<img src="./Images/painel_git.png" width="50%" style="display: block; margin: auto;" />
 
 
 É necessário selecionar os arquivos na coluna **Staged** para prosseguir com o **Commit**. De acordo com a imagem abaixo, primeiro escreva uma mensagem para identificar o **Commit**, clique no botão commit e aparecerá uma mensagem dos arquivos modificados, feche a mensagem e clique em **Push** para subir os arquivos no Github. O comando **Pull** baixa os códigos no Github para a sua máquina.
 
-```{r, echo=FALSE, out.width = '90%', fig.align="center"}
-knitr::include_graphics("./Images/commit.png")
-```
+<img src="./Images/commit.png" width="90%" style="display: block; margin: auto;" />
 
 
 Interface gráfica do Rstudio com o Git:
 
-```{r, echo=FALSE, out.width = '65%', fig.align="center"}
-knitr::include_graphics("./Images/git_cheatsheet.png")
-```
+<img src="./Images/git_cheatsheet.png" width="65%" style="display: block; margin: auto;" />
 Fonte: [RStudio Cheatsheet](https://rstudio.com/wp-content/uploads/2016/03/rstudio-IDE-cheatsheet-portuguese.pdf)
 
 
