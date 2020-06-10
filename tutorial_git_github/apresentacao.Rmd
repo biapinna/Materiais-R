@@ -2,7 +2,9 @@
 title: "Usando o Git/Github no RStudio"
 author: "Beatriz Pinna"
 date: "`r format(Sys.time(), '%d/%m/%y')`"
-output: github_document
+output:
+  pdf_document:
+    toc: no
 
 ---
 

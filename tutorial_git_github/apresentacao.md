@@ -24,7 +24,7 @@ download do Git por esse [link](https://git-scm.com/downloads).
 
 Veja se o Git aparece no RStudio em Tools \> Global Optios \> Git/SVN.
 
-    ## Error in knitr::include_graphics("./Images/git_rstudio.png"): Cannot find the file(s): "./Images/git_rstudio.png"
+<img src="./Images/git_rstudio.png" width="50%" style="display: block; margin: auto;" />
 
 ## Conta no Github
 
@@ -86,14 +86,14 @@ marque a opção para adicionar o arquivo README, que é uma introdução do
 seu projeto e será clonado no seu computador, e clique em **Create
 repository**.
 
-    ## Error in knitr::include_graphics("./Images/new_repository.png"): Cannot find the file(s): "./Images/new_repository.png"
+<img src="./Images/new_repository.png" width="70%" style="display: block; margin: auto;" />
 
 > Crie um projeto de controle de versão pelo RStudio
 
 No Github abra o repositório que você criou e em **Clone or download**
 copie a URL, como aparece na imagem abaixo.
 
-    ## Error in knitr::include_graphics("./Images/clone_repository.png"): Cannot find the file(s): "./Images/clone_repository.png"
+<img src="./Images/clone_repository.png" width="70%" style="display: block; margin: auto;" />
 
 No Rstudio vá em File \> New Project \> Version Control \> Git e crie um
 novo projeto de controle de versão. Em **Repository URL** cole o link do
@@ -102,13 +102,13 @@ repositório do Github que você copiou. Após inserir o link, o campo
 o diretório em **Create project as subdirectory of** para salvar a cópia
 local do repositório.
 
-    ## Error in knitr::include_graphics("./Images/new_project.png"): Cannot find the file(s): "./Images/new_project.png"
+<img src="./Images/new_project.png" width="50%" style="display: block; margin: auto;" />
 
 O Git através do RStudio fornece uma interface gráfica simples. Ao abrir
 o seu projeto versionados com Git no RStudio você verá o Painel do Git
 como na imagem abaixo.
 
-    ## Error in knitr::include_graphics("./Images/painel_git.png"): Cannot find the file(s): "./Images/painel_git.png"
+<img src="./Images/painel_git.png" width="50%" style="display: block; margin: auto;" />
 
 É necessário selecionar os arquivos na coluna **Staged** para prosseguir
 com o **Commit**. De acordo com a imagem abaixo, primeiro escreva uma
@@ -117,12 +117,11 @@ aparecerá uma mensagem dos arquivos modificados, feche a mensagem e
 clique em **Push** para subir os arquivos no Github. O comando **Pull**
 baixa os códigos no Github para a sua máquina.
 
-    ## Error in knitr::include_graphics("./Images/commit.png"): Cannot find the file(s): "./Images/commit.png"
+<img src="./Images/commit.png" width="90%" style="display: block; margin: auto;" />
 
 Interface gráfica do Rstudio com o Git:
 
-    ## Error in knitr::include_graphics("./Images/git_cheatsheet.png"): Cannot find the file(s): "./Images/git_cheatsheet.png"
-
+<img src="./Images/git_cheatsheet.png" width="65%" style="display: block; margin: auto;" />
 Fonte: [RStudio
 Cheatsheet](https://rstudio.com/wp-content/uploads/2016/03/rstudio-IDE-cheatsheet-portuguese.pdf)
 
