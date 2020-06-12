@@ -1,0 +1,222 @@
+---
+title: "Análise de dados amostrais complexos"
+author: "Beatriz Pinna"
+date: "11/06/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FALSE)
+```
+
+## Introdução
+
+Este documento visa replicar as análises do livro do Djalma Pessoa [link](https://djalmapessoa.github.io/adac/introduc.html#tab:numset) e também como material de estudo dos métodos e recursos computacionais para análise de dados amostrais complexos, principalmente das pesquisas do IBGE.
+
+
+
+## Exemplos
+
+Os dados utilizados no material são relativos à distribuição dos pesos na amostra da Pesquisa sobre Padrões de Vida (PPV), realizada pelo IBGE nos anos 1996-97.
+
+
+O plano amostral empregado na seleção da amostra da PPV foi estratificado e conglomerado em dois estágios, com alocação igual mas desproporcional da amostra nos estratos geográficos.
+
+
+Na análise de dados desta pesquisa, deve-se considerar que há elementos da amostra com pesos muito distintos. Por exemplo, a razão entre o maior e o menor peso é cerca de 40 vezes. Os pesos também variam bastante entre as regiões, com mediana 3,5 vezes maior na região Sudeste quando comparada com a região Nordeste, em função da alocação igual mas desproporcional da amostra nas regiões.
+
+Tais pesos são utilizados para expandir os dados, multiplicando-se cada observação pelo seu respectivo peso. Assim, por exemplo, para estimar quantos elementos da população pertencem a determinado conjunto ( domínio ), basta somar os pesos dos elementos da amostra que pertencem a este conjunto. É possível ainda incorporar os pesos, de maneira simples e natural, quando se quer estimar medidas descritivas simples da população, tais como totais, médias, proporções, razões, etc.
+
+Por outro lado, quando se quer utilizar a amostra para estudos analíticos, as opções padrão disponíveis nos pacotes estatísticos usuais para levar em conta os pesos distintos das observações são apropriadas somente para observações Independentes e Identicamente Distribuídas (IID). 
+
+### Laboratório de R do Capítulo 1
+
+Instalando o pacote `anamco()` que contém os bancos de dados utilizados no livro.
+
+```{r, eval=FALSE}
+# instalação da library anamco
+library(devtools)
+install_github("djalmapessoa/anamco")
+install.packages("survey")
+```
+
+
+Obtendo os dados da Pesquisa sobre Padrões de Vida (PPV) do IBGE que contém 13 variáveis com 19409 observações.
+```{r}
+# Leitura dos dados
+library(anamco)
+ppv_dat <- ppv
+# Características dos dados da PPV
+dim(ppv_dat)
+names(ppv_dat)
+```
+
+Os autores adicionam 14 variáveis derivadas das variáveis existentes do conjunto de dados.
+
+* analf1 - indicador de analfabeto na faixa etária de 7 a 14 anos;
+
+* analf2 - indicador de analfabeto na faixa etária acima de 14 anos;
+
+* faixa1 - indicador de idade entre 7 e 14 anos;
+
+* faixa2 - indicador de idade acima de 14 anos;
+```{r}
+# Adiciona variáveis ao arquivo ppv_dat
+ppv_dat <- transform(ppv_dat, 
+analf1 = ((v04a01 == 2 | v04a02 == 2) & (v02a08 >= 7 & v02a08 <= 14)) * 1, 
+analf2 = ((v04a01 == 2 | v04a02 == 2) & (v02a08 >14)) * 1, 
+faixa1 = (v02a08 >= 7 & v02a08 <= 14) *1, 
+faixa2 = (v02a08 > 14) * 1)
+str(ppv_dat)
+```
+
+Variáveis que caracterizam o plano amostral:
+
+* estratof - identifica os estratos de seleção;
+
+* nsetor - identifica as unidades primárias de amostragem ou conglomerados;
+
+* pesof - identifica os pesos do plano amostral.
+
+
+
+O passo fundamental para utilização do pacote survey (Lumley 2017) é criar um objeto que guarde as informações relevantes sobre a estrutura do plano amostral junto dos dados. Isso é feito por meio da função svydesign(). As variáveis que definem estratos, conglomerados e pesos na PPV são estratof, nsetor e pesof respectivamente. O objeto de desenho amostral que é criado após a execução da função (aqui chamado ppv_plan) incorpora as informações da estrutura do plano amostral adotado na PPV.
+
+
+```{r}
+# Carrega o pacote survey
+library(survey)
+# Cria objeto contendo dados e metadados sobre a estrutura do plano amostral
+ppv_plan <- svydesign(ids = ~nsetor, # Declara a unidade amostral mais granular
+                      strata = ~estratof, # Declara a variável que contém os estratos
+                      data = ppv_dat, # Declara base de microdados
+                      nest = TRUE, # Declara que os estratos podem conter identificações identicas para UPA's distintas
+                      weights = ~pesof # Declara variável com pesos
+                      )
+```
+
+
+
+```{r}
+# Sumariza o objeto contendo as informações sobre estrutura do plano amostral
+summary(ppv_plan)
+```
+
+__________________________________________________________________
+
+> Sintaxe básica da função `svydesign()`
+
+A função `svydesign()` especifica o planejamento (desenho) amostral utilizado na pesquisa.
+
+```{r,eval=FALSE}
+svydesign(ids, 
+          probs = NULL, 
+          strata = NULL, 
+          variables = NULL,
+          fpc = NULL, 
+          weights = NULL, 
+          data = NULL)
+```
+
+* ids: fórmula ou dataframe especificando id’s (identificadores) de cluster (conglomerados) do maior para o menor nível, 0 ou 1 especifica que não há cluster (conglomerados);
+
+* probs: fórmula ou dataframe especificando probabilidades de amostragem dos clusters (conglomerados).
+
+* estratos: fórmula ou vetor especificando estratos, use “NULL” para
+indicar que não há estratos.
+
+* variáveis: fórmula ou frame de dados especificando as variáveis (de
+interesse). Se “NULL”, (todos) os dados fornecidos são utilizados.
+
+* fpc: correção de populações finitas, especificada como o tamanho total da população em cada estrato ou como a fração da população total que foi amostrada (relativa à fração amostral).
+
+* pesos: Fórmula ou vetor especificando pesos de amostragem como uma alternativa ao argumento “prob” (geralmente 1/prob).
+
+* data: dataframe (banco de dados utilizado, deve contar todas as
+variáveis a serem utilizadas, probs, estratos, vari´aives, fpc, pesos).
+
+__________________________________________________________________
+
+Criação do desenho restrito a região Sudeste para facilitar as análises.
+
+```{r}
+ppv_se_plan <- subset(ppv_plan, regiao == 2)
+summary(ppv_se_plan)
+```
+
+Vamos estimar algumas características da população, como os totais das variáveis `analf1` e `analf2`:
+
+* total de analfabetos nas faixas etárias de 7 a 14 anos (`analf1`) e
+
+* total de analfabetos acima de 14 anos (`analf2`).
+
+```{r}
+svytotal(~analf1, ppv_se_plan, deff = TRUE)
+
+```
+
+```{r}
+svytotal(~analf2, ppv_se_plan, deff = TRUE)
+```
+
+* percentual de analfabetos nas faixas etárias consideradas
+
+```{r}
+svyratio(~analf1, ~faixa1, ppv_se_plan)
+```
+
+```{r}
+svyratio(~analf2, ~faixa2, ppv_se_plan)
+```
+
+Estimando os totais da variável analf1 para as regiões Nordeste e Sudeste da seguinte forma, onde 1=Nordeste e 2=Sudeste.
+
+```{r}
+svyby(~analf1, ~regiao, ppv_plan, svytotal, deff = TRUE)
+```
+
+
+A principal utilidade do pacote `srvyr` é permitir que variáveis derivadas e transformações das variáveis existentes sejam feitas depois que é criado um objeto do tipo que contém os dados e os metadados sobre a estrutura do plano amostral (como é o caso do objeto `ppv_plan`).
+
+
+```{r}
+library(srvyr)
+library(dplyr)
+library(kableExtra)
+```
+
+Cria objeto de desenho:
+```{r}
+ppv_plan <- ppv_dat %>% 
+            as_survey_design(strata = estratof, ids = nsetor, nest = TRUE, 
+                             weights = pesof)
+```
+
+Criando novamente as variáveis derivadas necessárias, mas observe que, desta vez, estas variáveis estão sendo adicionadas ao objeto que já contém os dados e as informações (metadados) sobre a estrutura do plano amostral.
+```{r}
+ppv_plan <- ppv_plan %>% 
+            mutate(
+analf1 = as.numeric((v04a01 == 2 | v04a02 == 2) & (v02a08 >= 7 & v02a08 <= 14)), 
+analf2 = as.numeric((v04a01 == 2 | v04a02 == 2) & (v02a08 >14)), 
+faixa1 = as.numeric(v02a08 >= 7 & v02a08 <= 14), 
+faixa2 = as.numeric(v02a08 > 14)   
+)
+```
+
+Estimar a taxa de analfabetos por região para as faixas etárias de 7-14 anos e mais de 14 anos.
+
+```{r, eval=FALSE}
+result1 <- ppv_plan %>%  
+           group_by(regiao) %>% 
+           summarise(
+           taxa_analf1 = 100*survey_ratio(analf1, faixa1),
+           taxa_analf2 = 100*survey_ratio(analf2, faixa2)  
+           )
+result1$regiao <- c("Nordeste","Sudeste")
+knitr::kable(as.data.frame(result1), booktabs = TRUE, row.names = FALSE, digits = 1,
+             align = "crrrr", format.args= list(decimal.mark=","),
+caption = "Porcentagem de analfabetos para faixas etárias 7-14 anos e mais de 14 anos")
+```
+
+
+
