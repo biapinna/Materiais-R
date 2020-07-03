@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FAL
 
 ## Introdução
 
-Este documento visa replicar as análises do livro do Djalma Pessoa [link](https://djalmapessoa.github.io/adac/introduc.html#tab:numset) e também como material de estudo dos métodos e recursos computacionais para análise de dados amostrais complexos, principalmente das pesquisas do IBGE.
+Este documento visa replicar as análises do livro do Djalma Pessoa [link](https://djalmapessoa.github.io/adac/) e também como material de estudo dos métodos e recursos computacionais para análise de dados amostrais complexos, principalmente das pesquisas do IBGE.
 
 
 
@@ -51,7 +51,7 @@ dim(ppv_dat)
 names(ppv_dat)
 ```
 
-Os autores adicionam 14 variáveis derivadas das variáveis existentes do conjunto de dados.
+Os autores adicionam 4 variáveis derivadas das variáveis existentes do conjunto de dados.
 
 * analf1 - indicador de analfabeto na faixa etária de 7 a 14 anos;
 
@@ -133,7 +133,7 @@ interesse). Se “NULL”, (todos) os dados fornecidos são utilizados.
 * pesos: Fórmula ou vetor especificando pesos de amostragem como uma alternativa ao argumento “prob” (geralmente 1/prob).
 
 * data: dataframe (banco de dados utilizado, deve contar todas as
-variáveis a serem utilizadas, probs, estratos, vari´aives, fpc, pesos).
+variáveis a serem utilizadas, probs, estratos, variáves, fpc, pesos).
 
 __________________________________________________________________
 
@@ -149,6 +149,9 @@ Vamos estimar algumas características da população, como os totais das variá
 * total de analfabetos nas faixas etárias de 7 a 14 anos (`analf1`) e
 
 * total de analfabetos acima de 14 anos (`analf2`).
+
+
+**obs**: `DEff` corresponde ao Efeitos de Plano Amostral (EPA).
 
 ```{r}
 svytotal(~analf1, ppv_se_plan, deff = TRUE)
@@ -175,6 +178,7 @@ Estimando os totais da variável analf1 para as regiões Nordeste e Sudeste da s
 svyby(~analf1, ~regiao, ppv_plan, svytotal, deff = TRUE)
 ```
 
+__________________________________________________________________
 
 A principal utilidade do pacote `srvyr` é permitir que variáveis derivadas e transformações das variáveis existentes sejam feitas depois que é criado um objeto do tipo que contém os dados e os metadados sobre a estrutura do plano amostral (como é o caso do objeto `ppv_plan`).
 
@@ -205,18 +209,26 @@ faixa2 = as.numeric(v02a08 > 14)
 
 Estimar a taxa de analfabetos por região para as faixas etárias de 7-14 anos e mais de 14 anos.
 
-```{r, eval=FALSE}
+```{r}
 result1 <- ppv_plan %>%  
            group_by(regiao) %>% 
            summarise(
-           taxa_analf1 = 100*survey_ratio(analf1, faixa1),
-           taxa_analf2 = 100*survey_ratio(analf2, faixa2)  
+           taxa_analf1 = survey_ratio(analf1, faixa1),
+           taxa_analf2 = survey_ratio(analf2, faixa2)  
            )
+
 result1$regiao <- c("Nordeste","Sudeste")
-knitr::kable(as.data.frame(result1), booktabs = TRUE, row.names = FALSE, digits = 1,
-             align = "crrrr", format.args= list(decimal.mark=","),
-caption = "Porcentagem de analfabetos para faixas etárias 7-14 anos e mais de 14 anos")
+result1$taxa_analf1 <- 100*result1$taxa_analf1
+result1$taxa_analf2 <- 100*result1$taxa_analf2
+result1$taxa_analf1_se <- 100*result1$taxa_analf1_se
+result1$taxa_analf2_se <- 100*result1$taxa_analf2_se
 ```
 
 
+```{r}
+knitr::kable(as.data.frame(result1), booktabs = TRUE, row.names = FALSE, digits = 1,
+             align = "crrrr", format.args= list(decimal.mark=","),
+caption = "Porcentagem de analfabetos para faixas etárias 7-14 anos e mais de 14 anos")%>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+```
 
